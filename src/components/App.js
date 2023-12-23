@@ -40,6 +40,10 @@ function App() {
     }
   }
 
+  const handleBookshelfChange = (book, shelf) => {
+    console.log(`moving ${book.title} to ${shelf}`);
+  }
+
   return (
     <div data-bs-theme="dark" className="App">
       <header>
@@ -59,13 +63,13 @@ function App() {
             <div>
               <h2 className="mt-3"><i className="bi bi-bookmarks"></i> Currently Reading</h2>
               <hr />
-              <Bookshelf books={currentlyReading}/>
+              <Bookshelf books={currentlyReading} onMove={handleBookshelfChange}/>
               <h2 className="mt-3"><i className="bi bi-bookmark-heart"></i> Want to Read</h2>
               <hr />
-              <Bookshelf books={wantToRead}/>
+              <Bookshelf books={wantToRead} onMove={handleBookshelfChange}/>
               <h2 className="mt-3"><i className="bi bi-bookmark-check"></i> Read</h2>
               <hr />
-              <Bookshelf books={read}/>
+              <Bookshelf books={read} onMove={handleBookshelfChange}/>
             </div>
           } />
           <Route path="/search" element={

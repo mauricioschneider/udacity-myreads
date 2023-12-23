@@ -1,6 +1,6 @@
 import Book from './Book';
 
-const Bookshelf = ({ books, handleCollectionChange }) => {
+const Bookshelf = ({ books, onMove }) => {
   const emptyShelf = (!books || books.length === 0);
   if (emptyShelf) {
     return (
@@ -13,7 +13,7 @@ const Bookshelf = ({ books, handleCollectionChange }) => {
   return (
     <div className="row row-cols-3 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-2">
       {books.map((book) => (
-        <Book key={book.id} book={book} />
+        <Book key={book.id} book={book} onMove={ onMove }/>
       ))}
     </div>
   )}

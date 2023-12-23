@@ -1,4 +1,14 @@
-const Book = ({ book }) => {
+const Book = ({ book, onMove }) => {
+
+  const handleMove = (e) => {
+    e.preventDefault();
+    const bookshelf = e.target.name;
+    onMove(book, bookshelf);
+  }
+
+  const selected = (shelf) => {
+    return book.shelf === shelf;
+  }
 
   return (
     <div key={book.id} className="col">
@@ -16,11 +26,43 @@ const Book = ({ book }) => {
               <button type="button" className="btn btn-outline-secondary">View</button>
               <div className="btn-group btn-group-sm" role="group">
                 <button type="button" className="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
+                  Move
                 </button>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="#">Dropdown link</a></li>
-                  <li><a className="dropdown-item" href="#">Dropdown link</a></li>
+                  <h6 className="dropdown-header">Move to...</h6>
+                  <li>
+                    <a
+                      className={`dropdown-item ${selected("currentlyReading") ? "disabled" : ""}`}
+                      onClick={handleMove}
+                      href="#"
+                      name="currentlyReading"
+                    >
+                      {(selected("currentlyReading")) && <i className="bi bi-check"></i>}
+                      Currently Reading
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className={`dropdown-item ${selected("wantToRead") ? "disabled" : ""}`}
+                      onClick={handleMove}
+                      href="#"
+                      name="wantToRead"
+                    >
+                      {(selected("wantToRead")) && <i className="bi bi-check"></i>}
+                      Want to Read
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className={`dropdown-item ${selected("read") ? "disabled" : ""}`}
+                      onClick={handleMove}
+                      href="#"
+                      name="read"
+                    >
+                      {(selected("read")) && <i className="bi bi-check"></i>}
+                      Read
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
