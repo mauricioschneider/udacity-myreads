@@ -12,6 +12,21 @@ function App() {
   const [wantToRead, setWantToRead] = useState([]);
   const [read, setRead] = useState([]);
 
+  const shelves = {
+     "currentlyReading": {
+      state: currentlyReading,
+      setter: setCurrentlyReading
+     },
+     "wantToRead": {
+      state: wantToRead,
+      setter: setWantToRead
+     },
+     "read": {
+      state: read,
+      setter:setRead
+     }
+  }
+
   useEffect(() => {
     let unmounted = false;
 
@@ -29,19 +44,21 @@ function App() {
 
   const sortBooks = (books) => {
     for (const book of books) {
-      switch (book.shelf) {
-        case "currentlyReading": setCurrentlyReading((prev) => [...prev, book]);
-          break;
-        case "wantToRead": setWantToRead((prev) => [...prev, book]);
-          break;
-        case "read": setRead((prev) => [...prev, book]);
-        break;
-      }
+      shelves[book.shelf].setter((prev) => [...prev, book]);
     }
   }
 
-  const handleBookshelfChange = (book, shelf) => {
-    console.log(`moving ${book.title} to ${shelf}`);
+  const handleBookshelfChange = async (book, shelf) => {
+    const res = await BooksAPI.update(book, shelf);
+
+    const oldShelf = book.shelf;
+    book.shelf = shelf;
+
+    // Adds book to new shelf
+    shelves[shelf].setter((prev) => [...prev, book]);
+
+    // Removes book from old shelf
+    shelves[oldShelf].setter((prev) => prev.filter((b) => b.id !== book.id));
   }
 
   return (
