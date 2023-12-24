@@ -30,6 +30,19 @@ const Book = ({ book, onMove }) => {
                 </button>
                 <ul className="dropdown-menu">
                   <h6 className="dropdown-header">Move to...</h6>
+                  {(book.shelf === undefined) &&
+                    <li>
+                      <a
+                        className="dropdown-item disabled"
+                        onClick={handleMove}
+                        href="#"
+                        name="read"
+                      >
+                        <i className="bi bi-check"></i>
+                        None
+                      </a>
+                    </li>
+                  }
                   <li>
                     <a
                       className={`dropdown-item ${selected("currentlyReading") ? "disabled" : ""}`}
