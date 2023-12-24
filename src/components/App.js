@@ -1,9 +1,10 @@
 
 import '../css/App.css';
 import { useState, useEffect } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 
 import Bookshelf from './Bookshelf';
+import Search from './Search';
 
 import * as BooksAPI from '../utils/BooksAPI';
 
@@ -12,31 +13,34 @@ function App() {
   const [wantToRead, setWantToRead] = useState([]);
   const [read, setRead] = useState([]);
 
+  const location = useLocation();
+
   const shelves = {
-     "currentlyReading": {
+    "currentlyReading": {
       state: currentlyReading,
       setter: setCurrentlyReading
-     },
-     "wantToRead": {
+    },
+    "wantToRead": {
       state: wantToRead,
       setter: setWantToRead
-     },
-     "read": {
+    },
+    "read": {
       state: read,
-      setter:setRead
-     }
+      setter: setRead
+    }
   }
 
   useEffect(() => {
     let unmounted = false;
 
-    const getBooks = async () => {
-      const books = await BooksAPI.getAll();
-      sortBooks(books);
+    if (!unmounted) {
+      const getBooks = async () => {
+        const books = await BooksAPI.getAll();
+        sortBooks(books);
+      }
+
+      getBooks();
     }
-
-    getBooks();
-
     return () => {
       unmounted = true;
     }
@@ -58,18 +62,37 @@ function App() {
     shelves[shelf].setter((prev) => [...prev, book]);
 
     // Removes book from old shelf
-    shelves[oldShelf].setter((prev) => prev.filter((b) => b.id !== book.id));
+    if (oldShelf) {
+      shelves[oldShelf].setter((prev) => prev.filter((b) => b.id !== book.id));
+    }
   }
-
   return (
     <div data-bs-theme="dark" className="App">
       <header>
         <nav className="navbar navbar-dark bg-dark">
           <div className="container">
             <Link className="navbar-brand" to="/"><i className="bi bi-book-half"></i> MyReads</Link>
-            <div className="d-flex justify-content-end flex-grow-1 pe-3">
-              <input className="form form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-light text-nowrap" type="submit"><i className="bi bi-journal-plus"></i> Add Book</button>
+            <div className="d-flex justify-content-end">
+              {location.pathname === "/" &&
+                <Link
+                  to="/search"
+                  className="btn btn-light text-nowrap"
+                  type="submit"
+                >
+                  <i className="bi bi-journal-plus m-1"></i>
+                  Add Book
+                </Link>
+              }
+              {location.pathname === "/search" &&
+                <Link
+                  to="/"
+                  className="btn btn-light text-nowrap"
+                  type="submit"
+                >
+                  <i className="bi bi-caret-left m-1"></i>
+                  Back to Collections
+                </Link>
+              }
             </div>
           </div>
         </nav>
@@ -80,17 +103,17 @@ function App() {
             <div>
               <h2 className="mt-3"><i className="bi bi-bookmarks"></i> Currently Reading</h2>
               <hr />
-              <Bookshelf books={currentlyReading} onMove={handleBookshelfChange}/>
+              <Bookshelf books={currentlyReading} onMove={handleBookshelfChange} />
               <h2 className="mt-3"><i className="bi bi-bookmark-heart"></i> Want to Read</h2>
               <hr />
-              <Bookshelf books={wantToRead} onMove={handleBookshelfChange}/>
+              <Bookshelf books={wantToRead} onMove={handleBookshelfChange} />
               <h2 className="mt-3"><i className="bi bi-bookmark-check"></i> Read</h2>
               <hr />
-              <Bookshelf books={read} onMove={handleBookshelfChange}/>
+              <Bookshelf books={read} onMove={handleBookshelfChange} />
             </div>
           } />
           <Route path="/search" element={
-            <Bookshelf />
+            <Search onMove={handleBookshelfChange} />
           } />
         </Routes>
 

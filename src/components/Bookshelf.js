@@ -6,7 +6,7 @@ const Bookshelf = ({ books, onMove }) => {
     return (
       <div className="px-4 py-5 my-5 text-center">
         <i className="bi bi-bookshelf" style={{ 'fontSize': '3em' }}></i>
-        <h4>No books in this collection</h4>
+        <h4>No books found.</h4>
       </div>
     );
   } else {

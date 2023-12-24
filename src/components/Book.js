@@ -13,7 +13,7 @@ const Book = ({ book, onMove }) => {
   return (
     <div key={book.id} className="col">
       <div className="card shadow-sm h-100">
-        <img className="bd-placeholder-img card-img-top" style={{ 'height': '200px', 'width': '100%', 'overflow': 'hidden' }} src={book.imageLinks.thumbnail} />
+        <img className="bd-placeholder-img card-img-top" style={{ 'height': '200px', 'width': '100%', 'overflow': 'hidden' }} src={book.imageLinks?.thumbnail} />
         <div className="card-body">
           <div className="card-text">
             <h6 className="card-title">{book.title}</h6>
