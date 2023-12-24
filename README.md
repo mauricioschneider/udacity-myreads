@@ -20,6 +20,13 @@ after a page refresh. The user catalog can be reset by removing the `token` key-
 - `npm install`
 - `npm start`
 
+## Dependencies
+
+The project runs successfully with the following node and npm versions:
+
+- `node v20.10.0`
+- `npm 10.2.3`
+
 ## Images
 
 ![MyReads](https://github.com/mauricioschneider/udacity-myreads/blob/main/docs/images/MyReads.png?raw=true)
