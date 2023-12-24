@@ -12,6 +12,7 @@ function App() {
   const [currentlyReading, setCurrentlyReading] = useState([]);
   const [wantToRead, setWantToRead] = useState([]);
   const [read, setRead] = useState([]);
+  const [allBooks, setAllBooks] = useState([]);
 
   const location = useLocation();
 
@@ -36,6 +37,7 @@ function App() {
     if (!unmounted) {
       const getBooks = async () => {
         const books = await BooksAPI.getAll();
+        setAllBooks(books);
         sortBooks(books);
       }
 
@@ -64,6 +66,10 @@ function App() {
     // Removes book from old shelf
     if (oldShelf) {
       shelves[oldShelf].setter((prev) => prev.filter((b) => b.id !== book.id));
+    } else {
+      // If old shelf wasn't set, it's a new book being added
+      // In which case, should be added to allBooks for tracking
+      setAllBooks((prev) => [...prev, book])
     }
   }
   return (
@@ -113,7 +119,7 @@ function App() {
             </div>
           } />
           <Route path="/search" element={
-            <Search onMove={handleBookshelfChange} />
+            <Search books={allBooks} onMove={handleBookshelfChange} />
           } />
         </Routes>
 

@@ -3,7 +3,7 @@ import * as BooksAPI from "../utils/BooksAPI";
 
 import Bookshelf from "./Bookshelf";
 
-const Search = ({ onMove }) => {
+const Search = ({ books, onMove }) => {
   const [allowedSearchTerms, setAllowedSearchTerms] = useState([]);
   const [query, setQuery] = useState([]);
   const [found, setFound] = useState([]);
@@ -29,8 +29,14 @@ const Search = ({ onMove }) => {
           const res = await BooksAPI.search(query);
 
           if (!res.error) {
+            res.forEach((foundBook, key) => {
+              const foundBookInCatalog = books.find((existingBook) => existingBook.id === foundBook.id);
+              
+              if (foundBookInCatalog) {
+                res[key] = foundBookInCatalog;
+              }
+            });
             setFound(res);
-            console.log(res);
           } else {
             setFound([]);
           }
