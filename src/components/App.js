@@ -5,6 +5,7 @@ import { Link, Route, Routes, useLocation } from 'react-router-dom';
 
 import Bookshelf from './Bookshelf';
 import Search from './Search';
+import Error404 from './Error404';
 
 import * as BooksAPI from '../utils/BooksAPI';
 
@@ -120,6 +121,9 @@ function App() {
           } />
           <Route path="/search" element={
             <Search books={allBooks} onMove={handleBookshelfChange} />
+          } />
+          <Route path="*" element={
+            <Error404 />
           } />
         </Routes>
 
